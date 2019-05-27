@@ -22,6 +22,7 @@ node('slave001') {
         echo "2.Compile the code"
         sh "mvn clean install"
         junit testResults: '**/target/*-reports/TEST-*.xml'
+        jacoco
     }
 
 
