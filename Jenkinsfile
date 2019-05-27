@@ -27,7 +27,7 @@ node('slave001') {
 
     stage('Basic Quality Report') {
         echo "3.Basic quality report"
-        sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check "
+        sh "mvn site pmd:check  pmd:cpd  checkstyle:check  findbugs:check "
 
         def java = scanForIssues tool: java()
         def javadoc = scanForIssues tool: javaDoc()
