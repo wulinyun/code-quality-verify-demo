@@ -77,10 +77,6 @@ node('slave001') {
         }
     }
 
-    stage('Build') {
-        echo "3. Install"
-        sh "mvn clean install; cd $project_module ; mvn clean install"
-    }
 
 }
 
