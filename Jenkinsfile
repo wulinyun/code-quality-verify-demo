@@ -27,7 +27,7 @@ node('slave001') {
 
     stage('Basic Quality Report') {
         echo "3.Basic quality report"
-        sh "mvn site pmd:check  pmd:cpd  checkstyle:check  findbugs:check "
+        sh "mvn site "
 
         def java = scanForIssues tool: java()
         def javadoc = scanForIssues tool: javaDoc()
@@ -51,6 +51,11 @@ node('slave001') {
 
         publishIssues id: 'analysis-all', name: 'All Issues',
                 issues: [checkstyle, pmd, spotbugs] //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
+    }
+
+    stage('Basic Quality Check') {
+        echo "3.1 Check quality threshold"
+        sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check"
     }
 
 
