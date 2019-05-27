@@ -32,7 +32,7 @@ node('slave001') {
         def java = scanForIssues tool: java()
         def javadoc = scanForIssues tool: javaDoc()
 
-        publishIssues issues: [java, javadoc]  //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
+        publishIssues id: 'analysis-java', name: 'Java Issues', issues: [java, javadoc]  //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
 
         def checkstyle = scanForIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
         publishIssues issues: [checkstyle]
