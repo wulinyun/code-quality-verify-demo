@@ -4,7 +4,6 @@ node('slave001') {
     stage('Prepare') {
         echo "1.Prepare Stage"
         checkout scm
-        //要部署的模块，若是根项目，用点 .
         project_module = '.'
         pom = readMavenPom file: "${project_module}/pom.xml"
         echo "group: ${pom.groupId}, artifactId: ${pom.artifactId}, version: ${pom.version}"
@@ -28,7 +27,7 @@ node('slave001') {
 
     stage('Basic Quality Report') {
         echo "3.Basic quality report"
-        sh "mvn site"
+        sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check "
 
         def java = scanForIssues tool: java()
         def javadoc = scanForIssues tool: javaDoc()
@@ -54,10 +53,6 @@ node('slave001') {
                 issues: [checkstyle, pmd, spotbugs] //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
     }
 
-    recordIssues(
-            enabledForFailure: true, aggregatingResults: true,
-            tools: [java(healthy: 10, unhealthy: 100, minimumSeverity: 'HIGH'), checkStyle(pattern: 'checkstyle-result.xml', reportEncoding: 'UTF-8')]
-    )
 
     stage('SonarQube analysis') {
         def sonarqubeScannerHome = tool name: 'SonarQube Scanner'
