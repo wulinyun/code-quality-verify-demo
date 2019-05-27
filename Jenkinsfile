@@ -49,7 +49,7 @@ node('slave001') {
         def maven = scanForIssues tool: mavenConsole()
         publishIssues issues: [maven]
 
-        publishIssues id: 'analysis', name: 'All Issues',
+        publishIssues id: 'analysis-all', name: 'All Issues',
                 issues: [checkstyle, pmd, spotbugs] //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
     }
 
