@@ -53,10 +53,10 @@ node('slave001') {
                 issues: [checkstyle, pmd, spotbugs] //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
     }
 
-    stage('Basic Quality Check') {
-        echo "3.1 Check quality threshold"
-        sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check"
-    }
+//    stage('Basic Quality Check') {
+//        echo "3.1 Check quality threshold"
+//        sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check"
+//    }
 
 
     stage('SonarQube analysis') {
