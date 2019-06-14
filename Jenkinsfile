@@ -3,6 +3,7 @@ node('slave001') {
 
     stage('Prepare') {
         echo "1.Prepare Stage"
+        updateGitlabCommitStatus name: 'build', state: 'pending'
         checkout scm
         project_module = '.'
         pom = readMavenPom file: "${project_module}/pom.xml"
@@ -19,9 +20,16 @@ node('slave001') {
 
     stage('Compile And UnitTest') {
         echo "2.Compile the code"
-        sh "mvn clean install"
-        junit testResults: '**/target/*-reports/TEST-*.xml'
-        jacoco()
+        try {
+            sh "mvn clean install"
+            junit testResults: '**/target/*-reports/TEST-*.xml'
+            jacoco()
+        } catch(Exception ex){
+            updateGitlabCommitStatus name: 'build', state: 'failed'
+            throw ex;
+        } finally {
+
+        }
     }
 
 
