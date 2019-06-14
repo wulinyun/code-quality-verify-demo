@@ -23,6 +23,8 @@ demo项目展示如何集成各种Java项目的质量扫描。目前支持
 - jacoco
 - sonarqube
 
+## Jenkins配置
+
 
 ## 开发流程
 
