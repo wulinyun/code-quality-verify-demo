@@ -1,36 +1,16 @@
 <FindBugsFilter>
   <!--参考  http://findbugs.sourceforge.net/manual/filter.html#d0e2318 -->
   <Match>
-    <Class name="com.foobar.ClassNotToBeAnalyzed" />
+    <Class name="~.*\.entity\..*" />
+  </Match>
+  <Match>
+    <Class name="~.*\.vo\..*" />
   </Match>
 
-  <Match>
-    <Class name="com.foobar.ClassWithSomeBugsMatched" />
-    <Bug code="DE,UrF,SIC" />
-  </Match>
 
   <!-- Match all XYZ violations. -->
   <Match>
-    <Bug code="XYZ" />
-  </Match>
-
-  <!-- Match all doublecheck violations in these methods of "AnotherClass". -->
-  <Match>
-    <Class name="com.foobar.AnotherClass" />
-    <Or>
-      <Method name="nonOverloadedMethod" />
-      <Method name="frob" params="int,java.lang.String" returns="void" />
-      <Method name="blat" params="" returns="boolean" />
-    </Or>
-    <Bug code="DC" />
-  </Match>
-
-  <!-- A method with a dead local store false positive (medium priority). -->
-  <Match>
-    <Class name="com.foobar.MyClass" />
-    <Method name="someMethod" />
-    <Bug pattern="DLS_DEAD_LOCAL_STORE" />
-    <Priority value="2" />
+    <Bug code="MALICIOUS_CODE" />
   </Match>
 
   <!-- All bugs in test classes, except for JUnit-specific bugs -->
@@ -40,5 +20,10 @@
       <Bug code="IJU" />
     </Not>
   </Match>
+
+  <Match>
+    <Class name="~com\.foobar\.fooproject\.ui.*" />
+  </Match>
+
 
 </FindBugsFilter>
