@@ -20,6 +20,7 @@ node('slave001') {
 
     stage('Compile And UnitTest') {
         echo "2.Compile the code"
+        gitLabConnection('gitlab-bigdata')
         updateGitlabCommitStatus name: 'build', state: 'pending'
         try {
             sh "mvn clean install"
