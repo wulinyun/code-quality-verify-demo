@@ -34,6 +34,8 @@ node('slave001') {
         } finally {
 
         }
+        updateGitlabCommitStatus name: 'build', state: 'success'
+        updateGitlabCommitStatus name: 'Basic Quality Check', state: 'pending'
     }
 
 
@@ -71,15 +73,18 @@ node('slave001') {
         try {
             sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check"
         } catch(Exception ex){
-            updateGitlabCommitStatus name: 'build', state: 'failed'
+            updateGitlabCommitStatus name: 'Basic Quality Check', state: 'failed'
             throw ex;
         } finally {
 
         }
+        updateGitlabCommitStatus name: 'Basic Quality Check', state: 'success'
     }
 
 
     stage('SonarQube analysis') {
+
+        updateGitlabCommitStatus name: 'SonarQube analysis', state: 'pending'
         def sonarqubeScannerHome = tool name: 'SonarQube Scanner'
 
         withSonarQubeEnv('SonarQube') {
@@ -93,8 +98,10 @@ node('slave001') {
         timeout(time: 1, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
             def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
             if (qg.status != 'OK') {
-                updateGitlabCommitStatus name: 'build', state: 'failed'
+                updateGitlabCommitStatus name: 'SonarQube analysis', state: 'failed'
                 error "Pipeline aborted due to quality gate failure: ${qg.status}"
+            } else {
+                updateGitlabCommitStatus name: 'SonarQube analysis', state: 'success'
             }
         }
     }
