@@ -13,9 +13,10 @@ node('slave001') {
         echo "group: ${pom.groupId}, artifactId: ${pom.artifactId}, version: ${pom.version}"
         script {
             build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-            if (env.BRANCH_NAME != 'master' && env.BRANCH_NAME != null) {
-                build_tag = "${env.BRANCH_NAME}-${build_tag}"
-            }
+            build_tag = "${env.BRANCH_NAME}-${build_tag}"
+//            if (env.BRANCH_NAME != 'master' && env.BRANCH_NAME != null) {
+//                build_tag = "${env.BRANCH_NAME}-${build_tag}"
+//            }
 
             currentBuild.displayName = BUILD_NUMBER + "_" +build_tag
         }
@@ -103,6 +104,12 @@ node('slave001') {
             } else {
                 updateGitlabCommitStatus name: 'SonarQube analysis', state: 'success'
             }
+        }
+    }
+
+    if (env.BRANCH_NAME == 'dev') {
+        stage("Build Docker Image"){
+            echo "build docker image"
         }
     }
 
