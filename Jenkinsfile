@@ -5,7 +5,6 @@ node('slave001') {
     stage('Prepare') {
         echo "1.Prepare Stage"
 
-
         checkout scm
         updateGitlabCommitStatus name: 'build', state: 'pending'
 
@@ -66,10 +65,18 @@ node('slave001') {
                 issues: [checkstyle, pmd, spotbugs] //, filters: [includePackage('io.jenkins.plugins.analysis.*')]
     }
 
-//    stage('Basic Quality Check') {
-//        echo "3.1 Check quality threshold"
-//        sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check"
-//    }
+    stage('Basic Quality Check') {
+        echo "3.1 Check quality threshold"
+
+        try {
+            sh "mvn pmd:check  pmd:cpd  checkstyle:check  findbugs:check"
+        } catch(Exception ex){
+            updateGitlabCommitStatus name: 'build', state: 'failed'
+            throw ex;
+        } finally {
+
+        }
+    }
 
 
     stage('SonarQube analysis') {
@@ -86,6 +93,7 @@ node('slave001') {
         timeout(time: 1, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
             def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
             if (qg.status != 'OK') {
+                updateGitlabCommitStatus name: 'build', state: 'failed'
                 error "Pipeline aborted due to quality gate failure: ${qg.status}"
             }
         }
