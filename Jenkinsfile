@@ -1,8 +1,10 @@
 node('slave001') {
 
+    properties([gitLabConnection('gitlab-bigdata')])
 
     stage('Prepare') {
         echo "1.Prepare Stage"
+        updateGitlabCommitStatus name: 'build', state: 'pending'
 
         checkout scm
         project_module = '.'
@@ -20,8 +22,7 @@ node('slave001') {
 
     stage('Compile And UnitTest') {
         echo "2.Compile the code"
-        gitLabConnection('gitlab-bigdata')
-        updateGitlabCommitStatus name: 'build', state: 'pending'
+
         try {
             sh "mvn clean install"
             junit testResults: '**/target/*-reports/TEST-*.xml'
