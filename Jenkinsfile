@@ -4,9 +4,11 @@ node('slave001') {
 
     stage('Prepare') {
         echo "1.Prepare Stage"
-        updateGitlabCommitStatus name: 'build', state: 'pending'
+
 
         checkout scm
+        updateGitlabCommitStatus name: 'build', state: 'pending'
+
         project_module = '.'
         pom = readMavenPom file: "${project_module}/pom.xml"
         echo "group: ${pom.groupId}, artifactId: ${pom.artifactId}, version: ${pom.version}"
