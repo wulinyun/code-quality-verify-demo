@@ -19,7 +19,7 @@ public class CodeQualityVerifyDemoApplicationTests {
     @Test
     public void Test1() {
         System.out.println("test 1+1=2");
-        Assert.assertEquals(2, 1 + 2);//单元测试正确逻辑
+        Assert.assertEquals(2, 1 + 1);//单元测试正确逻辑
         //Assert.assertEquals(2, 1 + 2);//单元测试错误逻辑
     }
 
